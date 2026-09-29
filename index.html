@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ember & Oak — Modern Wood-Fired Kitchen</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #1a2332;
+      --navy-light: #2a3648;
+      --coral: #ff6b5b;
+      --coral-dark: #e85545;
+      --cream: #fef9f4;
+      --cream-dark: #f5ede3;
+      --slate: #5a6a7a;
+      --text: #2c3540;
+      --text-light: #6b7a8a;
+      --border: #e8e0d6;
+      --white: #ffffff;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--cream);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      color: var(--navy);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 32px;
+    }
+
+    /* ===== STICKY HEADER ===== */
+    header {
+      background-color: var(--white);
+      padding: 0;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 1px 0 var(--border), 0 4px 20px rgba(26, 35, 50, 0.04);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      gap: 24px;
+    }
+
+    .brand {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      background-color: var(--coral);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+    .brand-text span {
+      color: var(--coral);
+    }
+
+    nav ul {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text);
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      padding: 6px 0;
+      letter-spacing: 0.2px;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: var(--coral);
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover {
+      color: var(--coral);
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .header-cta {
+      background-color: var(--navy);
+      color: white;
+      padding: 11px 26px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .header-cta:hover {
+      background-color: var(--coral);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 91, 0.3);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      background-color: var(--navy);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 60%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255, 107, 91, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+      min-height: 620px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      padding: 80px 0;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: rgba(255, 107, 91, 0.15);
+      color: var(--coral);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 26px;
+    }
+
+    .hero h1 {
+      font-size: 3.8rem;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      color: white;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--coral);
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 40px;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background-color: var(--coral);
+      color: white;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(255, 107, 91, 0.35);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--coral-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(255, 107, 91, 0.45);
+    }
+
+    .btn-ghost {
+      background-color: transparent;
+      color: white;
+      padding: 15px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--coral);
+      color: var(--coral);
+    }
+
+    .hero-visual {
+      position: relative;
+      height: 100%;
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-img-main {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      border-radius: 16px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-badge {
+      position: absolute;
+      bottom: 40px;
+      left: -30px;
+      background-color: var(--white);
+      color: var(--navy);
+      padding: 20px 26px;
+      border-radius: 14px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 2;
+    }
+
+    .hero-badge i {
+      font-size: 1.8rem;
+      color: var(--coral);
+    }
+
+    .hero-badge .badge-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .hero-badge .badge-label {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    /* ===== STATS STRIP ===== */
+    .stats-strip {
+      background-color: var(--navy-light);
+      padding: 40px 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: white;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-item:last-child {
+      border-right: none;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--coral);
+      display: block;
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.65);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 500;
+    }
+
+    /* ===== SECTION BASE ===== */
+    section {
+      padding: 100px 0;
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 64px;
+    }
+
+    .section-tag {
+      display: inline-block;
+      color: var(--coral);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-head h2 {
+      font-size: 2.6rem;
+      margin-bottom: 16px;
+    }
+
+    .section-head p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    /* ===== ABOUT ===== */
+    .about {
+      background-color: var(--white);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    .about-img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .about-img-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .about-img-1 {
+      grid-row: 1 / 3;
+      height: 100%;
+      min-height: 420px;
+    }
+
+    .about-img-2,
+    .about-img-3 {
+      height: 200px;
+    }
+
+    .about-accent {
+      position: absolute;
+      top: -24px;
+      left: -24px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: var(--coral);
+      opacity: 0.1;
+      z-index: -1;
+    }
+
+    .about-text h2 {
+      font-size: 2.4rem;
+      margin-bottom: 20px;
+    }
+
+    .about-text > p {
+      color: var(--text-light);
+      margin-bottom: 18px;
+      line-height: 1.8;
+    }
+
+    .about-features {
+      margin-top: 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .about-feature {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .about-feature-icon {
+      width: 48px;
+      height: 48px;
+      background-color: var(--cream-dark);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--coral);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .about-feature h4 {
+      font-size: 1.05rem;
+      margin-bottom: 4px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+    }
+
+    .about-feature p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* ===== SERVICES / MENU ===== */
+    .services {
+      background-color: var(--cream);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .menu-card {
+      background-color: var(--white);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.35s ease;
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 50px rgba(26, 35, 50, 0.12);
+      border-color: transparent;
+    }
+
+    .menu-img-wrap {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .menu-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .menu-card:hover .menu-img-wrap img {
+      transform: scale(1.08);
+    }
+
+    .menu-price {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background-color: var(--coral);
+      color: white;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .menu-body {
+      padding: 24px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-body h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+      color: var(--navy);
+    }
+
+    .menu-body p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .menu-footer {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: var(--coral);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===== CONTACT ===== */
+    .contact {
+      background-color: var(--white);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 70px;
+      align-items: start;
+    }
+
+    .contact-info h2 {
+      font-size: 2.4rem;
+      margin-bottom: 18px;
+    }
+
+    .contact-info > p {
+      color: var(--text-light);
+      margin-bottom: 36px;
+      line-height: 1.8;
+    }
+
+    .contact-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .contact-card {
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      padding: 20px;
+      background-color: var(--cream);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      background-color: var(--cream-dark);
+      transform: translateX(6px);
+    }
+
+    .contact-card-icon {
+      width: 46px;
+      height: 46px;
+      background-color: var(--coral);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .contact-card h4 {
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--navy);
+    }
+
+    .contact-card p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .contact-form-wrap {
+      background-color: var(--cream);
+      padding: 48px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .contact-form-wrap h3 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .contact-form-wrap > p {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 30px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background-color: var(--white);
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--text);
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--coral);
+      box-shadow: 0 0 0 4px rgba(255, 107, 91, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    .form-submit {
+      background-color: var(--navy);
+      color: white;
+      border: none;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      font-family: inherit;
+      margin-top: 8px;
+    }
+
+    .form-submit:hover {
+      background-color: var(--coral);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(255, 107, 91, 0.3);
+    }
+
+    /* ===== FOOTER — 3 COLUMNS ===== */
+    footer {
+      background-color: var(--navy);
+      color: rgba(255, 255, 255, 0.7);
+      padding: 80px 0 0;
+      font-size: 0.92rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1.3fr;
+      gap: 60px;
+      padding-bottom: 60px;
+    }
+
+    .footer-col h4 {
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 26px;
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 14px;
+    }
+
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 36px;
+      height: 2px;
+      background-color: var(--coral);
+    }
+
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .footer-brand-icon {
+      width: 42px;
+      height: 42px;
+      background-color: var(--coral);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.1rem;
+    }
+
+.footer-brand span {
+    color: #ffffff;
+}
+
+    .footer-col-1 p {
+      line-height: 1.8;
+      margin-bottom: 24px;
+      max-width: 340px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-social a {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 0.3s ease;
+    }
+
+    .footer-social a:hover {
+      background-color: var(--coral);
+      color: white;
+      transform: translateY(-4px);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 14px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .footer-links a i {
+      color: var(--coral);
+      font-size: 0.7rem;
+      transition: transform 0.3s ease;
+    }
+
+    .footer-links a:hover {
+      color: white;
+      transform: translateX(4px);
+    }
+
+    .footer-contact {
+      list-style: none;
+    }
+
+    .footer-contact li {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+
+    .footer-contact i {
+      color: var(--coral);
+      font-size: 1rem;
+      margin-top: 3px;
+      width: 18px;
+      flex-shrink: 0;
+    }
+
+    .footer-contact a {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .footer-contact a:hover {
+      color: var(--coral);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 26px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.85rem;
+    }
+
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-bottom-links a {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .footer-bottom-links a:hover {
+      color: var(--coral);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .hero h1 {
+        font-size: 3rem;
+      }
+
+      .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+      }
+
+      .footer-col-1 {
+        grid-column: 1 / 3;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .container {
+        padding: 0 24px;
+      }
+
+      .header-cta {
+        display: none;
+      }
+
+      .hero-inner {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .hero-text {
+        padding: 70px 0 40px;
+      }
+
+      .hero-visual {
+        min-height: 380px;
+      }
+
+      .hero-img-main {
+        height: 380px;
+      }
+
+      .hero-badge {
+        left: 20px;
+        bottom: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+      }
+
+      .stat-item:nth-child(2) {
+        border-right: none;
+      }
+
+      .about-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 50px;
+      }
+
+      .about-img-1 {
+        min-height: 340px;
+      }
+
+      section {
+        padding: 70px 0;
+      }
+
+      .section-head h2 {
+        font-size: 2rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      nav ul {
+        gap: 18px;
+      }
+
+      nav a {
+        font-size: 0.85rem;
+      }
+
+      .brand {
+        font-size: 1.3rem;
+      }
+
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      .btn-primary,
+      .btn-ghost {
+        padding: 13px 28px;
+        font-size: 0.88rem;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-form-wrap {
+        padding: 30px 24px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .footer-col-1 {
+        grid-column: 1 / 2;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .stat-num {
+        font-size: 1.7rem;
+      }
+
+      .stat-label {
+        font-size: 0.72rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== STICKY HEADER ========== -->
+  <header>
+    <div class="container header-inner">
+      <a href="#" class="brand">
+        <span class="brand-icon"><i class="fas fa-fire"></i></span>
+        <span class="brand-text">Ember <span>&</span> Oak</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+      <a href="#contact" class="header-cta">
+        <i class="fas fa-calendar-check"></i> Book a Table
+      </a>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <span class="hero-tag">
+            <i class="fas fa-star"></i> Wood-fired kitchen since 2012
+          </span>
+          <h1>Where every dish tells a <em>story</em>.</h1>
+          <p>We cook over open flame with ingredients from farms within 50 miles. Simple, honest, unforgettable food served in a room that feels like home.</p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn-primary">
+              Reserve Your Table <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#menu" class="btn-ghost">
+              <i class="fas fa-utensils"></i> View Menu
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <img class="hero-img-main" src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=900&q=80" alt="Warm restaurant interior with wood-fired oven">
+          <div class="hero-badge">
+            <i class="fas fa-award"></i>
+            <div>
+              <div class="badge-num">12+</div>
+              <div class="badge-label">Years of craft</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS STRIP ========== -->
+  <div class="stats-strip">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-num">12+</span>
+          <span class="stat-label">Years Serving</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">48</span>
+          <span class="stat-label">Seats Inside</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">50mi</span>
+          <span class="stat-label">Sourcing Radius</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">4.9</span>
+          <span class="stat-label">Guest Rating</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== ABOUT ========== -->
+  <section id="about" class="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-visual">
+          <div class="about-accent"></div>
+          <div class="about-img-grid">
+            <img class="about-img-1" src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?w=700&q=80" alt="Chef plating a dish in the kitchen">
+            <img class="about-img-2" src="https://images.unsplash.com/photo-1556909212-d5b604d0c90d?w=500&q=80" alt="Fresh vegetables on a wooden board">
+            <img class="about-img-3" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=500&q=80" alt="Dining room with warm lighting">
+          </div>
+        </div>
+        <div class="about-text">
+          <span class="section-tag">Our Story</span>
+          <h2>Rooted in fire, guided by seasons.</h2>
+          <p>Ember & Oak began as a backyard supper club in 2012 — twelve friends, one wood-fired grill, and a shared love of good food. Today we're a full restaurant, but that same spirit lives in everything we do.</p>
+          <p>Chef Marcus Rivera built our menu around a single idea: let the ingredients lead. Every dish starts with what's growing, what's fresh, and what's worth celebrating that week.</p>
+          <div class="about-features">
+            <div class="about-feature">
+              <div class="about-feature-icon"><i class="fas fa-leaf"></i></div>
+              <div>
+                <h4>Locally Sourced</h4>
+                <p>We partner with 14 farms and ranches within 50 miles of our kitchen.</p>
+              </div>
+            </div>
+            <div class="about-feature">
+              <div class="about-feature-icon"><i class="fas fa-fire-flame-curved"></i></div>
+              <div>
+                <h4>Wood-Fired Cooking</h4>
+                <p>Our custom oak-fired grill and oven are the heart of every plate we serve.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MENU ========== -->
+  <section id="menu" class="services">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-tag">The Menu</span>
+        <h2>Crafted with fire & patience</h2>
+        <p>A rotating selection of our signature dishes. The full menu changes weekly with the seasons.</p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card">
+          <div class="menu-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Braised short ribs plated elegantly">
+            <span class="menu-price">$32</span>
+          </div>
+          <div class="menu-body">
+            <h3>Oak-Braised Short Ribs</h3>
+            <p>Slow-braised for 8 hours in red wine and herbs, served over smoked cheddar grits with charred broccolini.</p>
+            <div class="menu-footer">
+              <i class="fas fa-fire"></i> Chef's Signature
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-img-wrap">
+            <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80" alt="Pan-seared salmon with vegetables">
+            <span class="menu-price">$28</span>
+          </div>
+          <div class="menu-body">
+            <h3>Cedar-Plank Salmon</h3>
+            <p>Wild-caught salmon roasted on cedar with lemon butter, fingerling potatoes, and seasonal greens.</p>
+            <div class="menu-footer">
+              <i class="fas fa-fish"></i> Guest Favorite
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-img-wrap">
+            <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=600&q=80" alt="Roasted vegetable grain bowl">
+            <span class="menu-price">$22</span>
+          </div>
+          <div class="menu-body">
+            <h3>Harvest Grain Bowl</h3>
+            <p>Farro, roasted squash, kale, pickled onion, and herbed goat cheese with a maple-tahini drizzle.</p>
+            <div class="menu-footer">
+              <i class="fas fa-seedling"></i> Vegetarian
+            </div>
+          </div>
+        </div>
+
+        <div class="menu-card">
+          <div class="menu-img-wrap">
+            <img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&q=80" alt="Chocolate dessert with berries">
+            <span class="menu-price">$14</span>
+          </div>
+          <div class="menu-body">
+            <h3>Smoked Chocolate Tart</h3>
+            <p>Dark chocolate ganache with a hint of smoked sea salt, topped with crème fraîche and fresh berries.</p>
+            <div class="menu-footer">
+              <i class="fas fa-cake-candles"></i> Dessert
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <span class="section-tag">Get in Touch</span>
+          <h2>Reserve your table.</h2>
+          <p>We take reservations up to 30 days in advance. For parties of 6 or more, please call us directly. Walk-ins are always welcome at the bar.</p>
+          <div class="contact-cards">
+            <div class="contact-card">
+              <div class="contact-card-icon"><i class="fas fa-location-dot"></i></div>
+              <div>
+                <h4>Visit Us</h4>
+                <p>1847 NW Marshall Street<br>Portland, OR 97209</p>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon"><i class="fas fa-phone"></i></div>
+              <div>
+                <h4>Call Us</h4>
+                <p>(503) 555-0184</p>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <h4>Email Us</h4>
+                <p>hello@emberandoak.com</p>
+              </div>
+            </div>
+            <div class="contact-card">
+              <div class="contact-card-icon"><i class="fas fa-clock"></i></div>
+              <div>
+                <h4>Hours</h4>
+                <p>Tue–Thu: 5pm–10pm<br>Fri–Sat: 5pm–11pm<br>Sun: 11am–9pm</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrap">
+          <h3>Book a table</h3>
+          <p>Fill out the form and we'll confirm your reservation within 2 hours.</p>
+          <form id="reservationForm" novalidate>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Jane Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="jane@email.com" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" placeholder="(503) 555-0000" required>
+              </div>
+              <div class="form-group">
+                <label for="guests">Guests</label>
+                <select id="guests" name="guests" required>
+                  <option value="">Select party size</option>
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="3">3 Guests</option>
+                  <option value="4">4 Guests</option>
+                  <option value="5">5 Guests</option>
+                  <option value="6+">6+ Guests</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="date">Preferred Date & Time</label>
+              <input type="datetime-local" id="date" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Special Requests</label>
+              <textarea id="message" name="message" placeholder="Dietary restrictions, celebrations, seating preferences..."></textarea>
+            </div>
+            <button type="submit" class="form-submit">
+              Confirm Reservation <i class="fas fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER — 3 COLUMNS ========== -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+
+        <!-- COLUMN 1: Logo + paragraph + social -->
+        <div class="footer-col footer-col-1">
+          <div class="footer-brand">
+            <span class="brand-icon"><i class="fas fa-fire"></i></span>
+            Ember <span>&</span> Oak
+          </div>
+          <p>A wood-fired kitchen in the heart of Portland. Seasonal ingredients, open flame, and a table that always has room for you.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="#" aria-label="Yelp"><i class="fab fa-yelp"></i></a>
+          </div>
+        </div>
+
+        <!-- COLUMN 2: Quick links -->
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+            <li><a href="#about"><i class="fas fa-chevron-right"></i> Our Story</a></li>
+            <li><a href="#menu"><i class="fas fa-chevron-right"></i> Menu</a></li>
+            <li><a href="#contact"><i class="fas fa-chevron-right"></i> Reservations</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Private Events</a></li>
+            <li><a href="#"><i class="fas fa-chevron-right"></i> Gift Cards</a></li>
+          </ul>
+        </div>
+
+        <!-- COLUMN 3: Get in touch -->
+        <div class="footer-col">
+          <h4>Get in Touch</h4>
+          <ul class="footer-contact">
+            <li>
+              <i class="fas fa-location-dot"></i>
+              <span>1847 NW Marshall Street</span>
+            </li>
+            <li>
+              <i class="fas fa-phone"></i>
+              <a href="tel:+15035550184">(503) 555-0184</a>
+            </li>
+            <li>
+              <i class="fas fa-envelope"></i>
+              <a href="mailto:hello@emberandoak.com">hello@emberandoak.com</a>
+            </li>
+            <li>
+              <i class="fas fa-clock"></i>
+              <span>Tue–Thu: 5pm–10pm<br>Fri–Sat: 5pm–11pm<br>Sun: 11am–9pm</span>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Ember & Oak. All rights reserved.</p>
+        <ul class="footer-bottom-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
